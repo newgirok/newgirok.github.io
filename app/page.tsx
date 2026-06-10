@@ -23,7 +23,7 @@ export default function Home() {
 
       <section className="home-section">
         <div className="home-section-header">
-          <h2>Projects</h2>
+          <h2>프로젝트</h2>
           <Link href="/projects">전체 보기 →</Link>
         </div>
         <div className="post-list">
@@ -35,7 +35,7 @@ export default function Home() {
 
       <section className="home-section">
         <div className="home-section-header">
-          <h2>Posts</h2>
+          <h2>글</h2>
           <Link href="/posts">전체 보기 →</Link>
         </div>
         <div className="post-list">
@@ -47,7 +47,7 @@ export default function Home() {
 
       <section className="home-section">
         <div className="home-section-header">
-          <h2>Links</h2>
+          <h2>링크</h2>
           <Link href="/links">전체 보기 →</Link>
         </div>
         <div className="post-list">

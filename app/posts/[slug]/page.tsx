@@ -34,7 +34,7 @@ export default async function PostDetail({ params }: Props) {
         <header className="article-header">
           <h1>{post.title}</h1>
           <div className="article-meta">
-            <span className="badge badge-posts">Post</span>
+            <span className="badge badge-posts">글</span>
             <span>{post.date}</span>
             {post.tags.length > 0 && (
               <div className="article-meta-tags">

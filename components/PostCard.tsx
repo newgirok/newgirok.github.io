@@ -12,7 +12,9 @@ export default function PostCard({ post }: { post: Post }) {
 
   return (
     <div className="post-card">
-      <span className={`post-type post-type-${post.type}`}>{post.type}</span>
+      <span className={`post-type post-type-${post.type}`}>
+        {{ projects: '프로젝트', posts: '글', links: '링크' }[post.type] ?? post.type}
+      </span>
       <span className="post-card-title">
         <Link href={href}>{post.title}</Link>
       </span>

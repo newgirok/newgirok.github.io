@@ -34,7 +34,7 @@ export default async function ProjectPost({ params }: Props) {
         <header className="article-header">
           <h1>{post.title}</h1>
           <div className="article-meta">
-            <span className="badge badge-projects">Project</span>
+            <span className="badge badge-projects">프로젝트</span>
             <span>{post.date}</span>
             {post.tags.length > 0 && (
               <div className="article-meta-tags">

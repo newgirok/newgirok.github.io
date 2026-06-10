@@ -2,14 +2,14 @@ import type { Metadata } from 'next'
 import { getPostsByType } from '@/lib/posts'
 import PostCard from '@/components/PostCard'
 
-export const metadata: Metadata = { title: 'Links' }
+export const metadata: Metadata = { title: '링크' }
 
 export default function LinkList() {
   const posts = getPostsByType('links')
   return (
     <>
       <div className="page-header">
-        <h1>Links</h1>
+        <h1>링크</h1>
       </div>
       <div className="post-list">
         {posts.map((post) => (
