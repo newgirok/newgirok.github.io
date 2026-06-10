@@ -5,12 +5,15 @@ import { MDXRemote } from 'next-mdx-remote/rsc'
 import rehypeHighlight from 'rehype-highlight'
 import { getPostsByType, getPostBySlug } from '@/lib/posts'
 
+export const dynamicParams = false
+
 interface Props {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  return getPostsByType('links').map((post) => ({ slug: post.slug }))
+  const posts = getPostsByType('links')
+  return posts.length > 0 ? posts.map((post) => ({ slug: post.slug })) : [{ slug: '_empty' }]
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
