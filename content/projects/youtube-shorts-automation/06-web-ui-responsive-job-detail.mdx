@@ -1,0 +1,41 @@
+---
+title: "웹 UI 반응형 개선과 Job 상세 페이지 상태 표시 고도화"
+date: "2026-05-20"
+project: "YouTube Shorts 자동화"
+tags: ["Next.js", "UI", "반응형", "React Query"]
+excerpt: "반응형 브레이크포인트 조정, Job 상태 배지 세분화, sync-videos 자동 호출로 실시간 데이터 갱신까지 한 번에 정리"
+---
+
+오늘은 웹 UI 전반에 걸친 반응형 개선 작업과 Job 상세 페이지의 상태 표시 로직을 다듬었다.
+
+## 반응형 브레이크포인트 md → lg 상향
+
+채널 페이지(`ChannelClient.tsx`)와 Job 상세 페이지(`dashboard/[id]/page.tsx`) 모두 3컬럼 레이아웃 기준이 `md`(768px)였는데, 실제로 태블릿 세로 모드에서 레이아웃이 너무 촘촘해지는 문제가 있었다. `lg`(1024px)로 올리면서 모바일에서는 패널 순서를 영상정보 → 처리단계 → 스크립트 순으로 재정렬했다.
+
+`ProgressBar` 컴포넌트에서는 iPhone SE처럼 좁은 화면에서 label 텍스트가 오버플로우되는 버그가 있었다. `shrink-0` 대신 `min-w-0`을 적용해서 해결했다.
+
+## Job 상태 배지 세분화
+
+기존에는 삭제된 YouTube 영상도 단순히 "실패"로 표시했는데, 이걸 "삭제" 배지로 분리했다. 사용자 입장에서는 처리 실패와 영상 삭제는 전혀 다른 상황이라 구분이 필요했다.
+
+완료된 Job에는 공개 상태(`public` / `unlisted` / `private`) 배지도 추가했다. 타입 정의(`types.ts`)에 `privacyStatus`와 `comment_bait` 필드를 추가해서 백엔드 응답을 그대로 반영했다.
+
+처리 시간도 초 단위 숫자 대신 "27분 24초" 형태로 포맷팅했다.
+
+## sync-videos 자동 호출
+
+Job 상세 페이지에 진입할 때 `youtubeVideoId`가 있으면 `sync-videos` API를 1회 자동으로 호출하도록 했다. YouTube의 최신 `viewCount`와 `privacyStatus`를 페이지 열자마자 반영하기 위해서다.
+
+```ts
+useEffect(() => {
+  if (!job?.youtubeVideoId || syncedRef.current) return;
+  syncedRef.current = true;
+  syncVideos().then(() => queryClient.invalidateQueries({ queryKey: ['job', id] }));
+}, [job?.youtubeVideoId]);
+```
+
+`syncedRef`로 중복 호출을 막고, 오류가 나도 UI에는 영향을 주지 않도록 처리했다. React Query의 `invalidateQueries`로 sync 완료 후 데이터를 자동 갱신한다.
+
+## 썸네일 fallback 처리
+
+Shorts 영상에서 `mqdefault.jpg`가 404를 반환하는 경우가 많아서, `maxresdefault.jpg`를 먼저 시도하고 실패 시 `hqdefault.jpg`로 fallback하는 `onError` 핸들러를 `HomeClient.tsx`와 `dashboard/[id]/page.tsx` 양쪽에 추가했다.

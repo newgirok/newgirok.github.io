@@ -124,6 +124,11 @@ a {
   border-bottom: 1px solid var(--border);
 }
 
+.post-card--numbered {
+  grid-template-columns: 2rem 1fr auto;
+  padding-left: 0;
+}
+
 .post-card:last-child { border-bottom: none; }
 
 .post-type {
