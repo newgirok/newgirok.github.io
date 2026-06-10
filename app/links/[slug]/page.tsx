@@ -29,12 +29,11 @@ export default async function LinkPost({ params }: Props) {
 
   return (
     <>
-      <Link href="/links" className="back-link">← Links 목록</Link>
+      <Link href="/links" className="back-link">← 링크 목록</Link>
       <article>
         <header className="article-header">
           <h1>{post.title}</h1>
           <div className="article-meta">
-            <span className="badge badge-links">링크</span>
             <span>{post.date}</span>
             {post.tags.length > 0 && (
               <div className="article-meta-tags">

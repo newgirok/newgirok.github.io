@@ -29,12 +29,11 @@ export default async function PostDetail({ params }: Props) {
 
   return (
     <>
-      <Link href="/posts" className="back-link">← Posts 목록</Link>
+      <Link href="/posts" className="back-link">← 글 목록</Link>
       <article>
         <header className="article-header">
           <h1>{post.title}</h1>
           <div className="article-meta">
-            <span className="badge badge-posts">글</span>
             <span>{post.date}</span>
             {post.tags.length > 0 && (
               <div className="article-meta-tags">
