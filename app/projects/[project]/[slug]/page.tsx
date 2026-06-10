@@ -3,38 +3,41 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import rehypeHighlight from 'rehype-highlight'
-import { getPostsByType, getPostBySlug } from '@/lib/posts'
+import { getProjectMetas, getProjectPosts, getProjectPost } from '@/lib/posts'
 
 export const dynamicParams = false
 
 interface Props {
-  params: Promise<{ slug: string }>
+  params: Promise<{ project: string; slug: string }>
 }
 
 export async function generateStaticParams() {
-  const posts = getPostsByType('projects')
-  return posts.length > 0 ? posts.map((post) => ({ slug: post.slug })) : [{ slug: '_empty' }]
+  const metas = getProjectMetas()
+  if (metas.length === 0) return [{ project: '_empty', slug: '_empty' }]
+  const params = metas.flatMap((m) =>
+    getProjectPosts(m.slug).map((p) => ({ project: m.slug, slug: p.slug }))
+  )
+  return params.length > 0 ? params : [{ project: '_empty', slug: '_empty' }]
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const post = getPostBySlug('projects', slug)
-  return { title: post?.title ?? 'Projects' }
+  const { project, slug } = await params
+  const post = getProjectPost(project, slug)
+  return { title: post?.title ?? '프로젝트' }
 }
 
-export default async function ProjectPost({ params }: Props) {
-  const { slug } = await params
-  const post = getPostBySlug('projects', slug)
+export default async function ProjectPostPage({ params }: Props) {
+  const { project, slug } = await params
+  const post = getProjectPost(project, slug)
   if (!post) notFound()
 
   return (
     <>
-      <Link href="/projects" className="back-link">← Projects 목록</Link>
+      <Link href={`/projects/${project}`} className="back-link">← {post.project}</Link>
       <article>
         <header className="article-header">
           <h1>{post.title}</h1>
           <div className="article-meta">
-            <span className="badge badge-projects">프로젝트</span>
             <span>{post.date}</span>
             {post.tags.length > 0 && (
               <div className="article-meta-tags">

@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import type { Post } from '@/lib/posts'
 
+const LABELS: Record<string, string> = { posts: '글', links: '링크' }
+
 function formatDate(dateStr: string) {
   if (!dateStr) return ''
   const d = new Date(dateStr)
@@ -9,12 +11,9 @@ function formatDate(dateStr: string) {
 
 export default function PostCard({ post }: { post: Post }) {
   const href = `/${post.type}/${post.slug}`
-
   return (
     <div className="post-card">
-      <span className={`post-type post-type-${post.type}`}>
-        {{ projects: '프로젝트', posts: '글', links: '링크' }[post.type] ?? post.type}
-      </span>
+      <span className={`post-type post-type-${post.type}`}>{LABELS[post.type] ?? post.type}</span>
       <span className="post-card-title">
         <Link href={href}>{post.title}</Link>
       </span>

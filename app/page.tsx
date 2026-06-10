@@ -1,11 +1,12 @@
-import { getAllPosts, getPostsByType } from '@/lib/posts'
+import { getAllPosts, getPostsByType, getProjectMetas } from '@/lib/posts'
 import PostCard from '@/components/PostCard'
+import ProjectCard from '@/components/ProjectCard'
 import Link from 'next/link'
 
 export default function Home() {
   const recent = getAllPosts().slice(0, 5)
+  const projects = getProjectMetas().slice(0, 3)
   const posts = getPostsByType('posts').slice(0, 3)
-  const projects = getPostsByType('projects').slice(0, 3)
   const links = getPostsByType('links').slice(0, 3)
 
   return (
@@ -26,9 +27,9 @@ export default function Home() {
           <h2>프로젝트</h2>
           <Link href="/projects">전체 보기 →</Link>
         </div>
-        <div className="post-list">
-          {projects.map((post) => (
-            <PostCard key={post.slug} post={post} />
+        <div className="project-list">
+          {projects.map((p) => (
+            <ProjectCard key={p.slug} project={p} />
           ))}
         </div>
       </section>
