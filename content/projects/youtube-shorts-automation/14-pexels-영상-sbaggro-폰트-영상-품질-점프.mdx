@@ -1,0 +1,42 @@
+---
+title: "Pexels 영상 + SBAggro 폰트 — 영상 품질 점프"
+date: "2026-05-24"
+project: "YouTube Shorts 자동화"
+tags: ["render", "pexels", "ffmpeg", "font", "sbAggro"]
+---
+
+솔직히 말하면, 이미지 zoompan으로 버티고 있었던 게 좀 창피했다.
+
+Ken Burns 효과로 정지 이미지를 슬금슬금 확대하는 방식 — 뉴스 썸네일 위에서 카메라가 천천히 줌인하는 그거. 기능은 했지만 볼 때마다 "이게 Shorts야, PPT야?" 싶었다.
+
+이번에 두 가지를 한꺼번에 갈아치웠다. **Pexels 실제 영상 클립**으로 배경을 바꾸고, 자막을 **SB어그로** 폰트로 교체했다. 결과물이 확 달라졌다.
+
+## 배경: 이미지 → 실제 영상
+
+핵심 변경은 간단하다. 각 씬마다 Pexels API로 키워드 검색 후 영상을 내려받고, 씬 길이에 맞춰 재생 속도를 조절한다.
+
+```typescript
+// setpts 필터로 씬 길이에 딱 맞게 늘리거나 줄이기
+const scaleFactor = clipDuration / sceneDuration;
+videoFilter = `setpts=${scaleFactor}*PTS`;
+```
+
+원본 클립이 씬보다 길면 느리게, 짧으면 빠르게. 단순하지만 오디오 타이밍이 딱 맞아 떨어지는 게 중요했다.
+
+## 자막: SRT → ASS 포맷 전환
+
+SRT는 스타일 제어가 거의 안 된다. FontSize를 72로 키우고, 줄 겹침 보정까지 하려면 ASS 포맷이 필요했다.
+
+```
+Style: Default,SB어그로 Medium,72,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,3,1,2,10,10,30,1
+```
+
+`fontsDir` 옵션으로 로컬 TTF를 FFmpeg에 직접 물려줄 수 있게 하고, SB어그로 Light/Medium 두 가지 웨이트를 추가했다. 한국어 가독성이 시스템 폰트 대비 체감상 확 다르다.
+
+## 로컬 통합 테스트
+
+파이프라인 전체를 로컬에서 한 번에 돌려볼 수 있는 `test-full-pipeline` 스크립트도 붙였다. SQS 없이 단계별로 직접 실행하는 방식이라 디버깅 사이클이 훨씬 빨라졌다.
+
+---
+
+변경된 코드 양은 많지 않은데 아웃풋 차이가 크다. 이런 게 재미있다.

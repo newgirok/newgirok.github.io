@@ -1,0 +1,53 @@
+---
+title: "5개 워커 구현 — 파이프라인의 심장"
+date: "2026-05-17"
+project: "YouTube Shorts 자동화"
+tags: ["worker", "gemini", "edge-tts", "whisper", "remotion", "youtube-api"]
+---
+
+파이프라인 뼈대를 잡고 나서, 이제 진짜 일을 하는 녀석들을 만들 차례였다.
+
+"워커 5개 짜면 되지 뭐" 하고 시작했는데... 각자 다른 언어, 다른 SDK, 다른 외부 API를 붙잡고 있어서 생각보다 꽤 손이 갔다.
+
+## 흐름은 단순하다
+
+```
+뉴스 기사 → [script] → [tts] → [subtitle] → [render] → [upload]
+```
+
+각 워커는 SQS 메시지를 받아서 작업하고, 결과물을 S3에 올린 뒤 다음 큐에 메시지를 던진다. 단순하고 명확하다. 이게 SQS 기반 파이프라인의 매력이다.
+
+## script 워커 — Gemini가 대본을 쓴다
+
+Gemini API에 뉴스 기사를 던지면 60초짜리 쇼츠 스크립트가 나온다. 프롬프트 튜닝이 제일 오래 걸렸다. "너무 딱딱해", "너무 가벼워"를 반복하다 보니 어느새 프롬프트가 소설이 되어 있었다.
+
+결과물은 JSON으로 S3에 저장. 구조화해야 다음 워커가 편하다.
+
+## tts 워커 — Microsoft Edge가 읽어준다
+
+처음엔 당연히 Clova나 Google TTS를 생각했는데, Edge TTS가 무료에 품질도 나쁘지 않다. `edge-tts` 파이썬 라이브러리 하나로 끝났다.
+
+```python
+communicate = edge_tts.Communicate(text, voice="ko-KR-SunHiNeural")
+await communicate.save(output_path)
+```
+
+한국어 목소리 중에 `SunHiNeural`이 제일 자연스럽더라.
+
+## subtitle 워커 — Whisper가 자막을 만든다
+
+TTS로 만든 음성을 다시 Whisper에 돌려서 SRT를 뽑는다. 왜 TTS 생성 시점에 자막을 만들지 않냐고? 타임스탬프가 필요하기 때문이다. 텍스트만 있으면 영상에서 싱크를 맞출 수가 없다.
+
+`faster-whisper` 덕분에 속도는 충분히 나온다.
+
+## render 워커 — Remotion이 영상을 조립한다
+
+스크립트, TTS 오디오, SRT 자막, 배경 이미지를 합쳐서 최종 영상을 만든다. FFmpeg 직접 다루는 대신 Remotion을 선택했는데, React 컴포넌트로 영상 레이아웃을 짤 수 있어서 수정이 훨씬 편했다.
+
+## upload 워커 — YouTube에 올라간다
+
+YouTube Data API v3. OAuth 토큰 관리가 제일 귀찮은 부분이었다. 렌더된 영상 경로를 S3에서 내려받아 업로드하고, Shorts 판정을 위해 `#Shorts` 태그를 자동으로 붙인다.
+
+---
+
+5개 워커가 각자 자기 역할만 충실히 하면, 뉴스 기사 하나가 YouTube Shorts가 되어 올라간다. 이게 실제로 돌아가는 걸 처음 봤을 때의 그 느낌은... 솔직히 꽤 짜릿했다.

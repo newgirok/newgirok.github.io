@@ -1,0 +1,34 @@
+---
+title: "자막 워커 교체 — faster-whisper를 버리다"
+date: "2026-05-19"
+project: "YouTube Shorts 자동화"
+tags: ["subtitle", "whisper", "srt"]
+---
+
+faster-whisper를 버렸다.
+
+솔직히 처음부터 이상했다. 우리 파이프라인은 이미 **스크립트 텍스트를 가지고 있다**. AI가 생성한 그 텍스트로 TTS를 돌리는 건데, 왜 그 음성을 다시 STT로 뒤집어서 자막을 만들고 있었을까?
+
+정확도도 문제였다. 한국어 TTS 음성을 Whisper로 돌리면 미묘하게 다른 텍스트가 나온다. 숫자, 고유명사, 영어 혼용 구간에서 특히 심했다. 거기다 느리기까지 해서 워커 전체 처리 시간의 절반을 자막 생성이 잡아먹었다.
+
+결론은 단순했다. **이미 있는 텍스트 + TTS 오디오 총 길이 → 문장별 비율로 타이밍 계산**.
+
+```typescript
+function buildSrtFromScript(sentences: string[], totalDuration: number): string {
+  const totalChars = sentences.reduce((sum, s) => sum + s.length, 0);
+  let cursor = 0;
+
+  return sentences.map((sentence, i) => {
+    const duration = (sentence.length / totalChars) * totalDuration;
+    const start = cursor;
+    cursor += duration;
+    return formatSrtBlock(i + 1, start, cursor, sentence);
+  }).join('\n\n');
+}
+```
+
+글자 수 비율로 나누는 게 정확하냐고? 완벽하진 않다. 하지만 TTS는 어차피 일정한 속도로 읽기 때문에 실제로 꽤 잘 맞는다. 그리고 Whisper 오차보다는 훨씬 낫다.
+
+처리 속도는 말할 것도 없이 빨라졌다. 의존성 하나 사라졌고, 파이썬 런타임도 필요 없어졌다. 생각해보면 처음부터 이렇게 했어야 했는데.
+
+때로는 빼는 게 더 나은 엔지니어링이다.
