@@ -9,11 +9,13 @@ function formatDate(dateStr: string) {
   return d.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })
 }
 
-export default function PostCard({ post }: { post: Post }) {
+export default function PostCard({ post, showType = false }: { post: Post; showType?: boolean }) {
   const href = `/${post.type}/${post.slug}`
   return (
-    <div className="post-card">
-      <span className={`post-type post-type-${post.type}`}>{LABELS[post.type] ?? post.type}</span>
+    <div className={`post-card ${showType ? 'post-card--typed' : 'post-card--plain'}`}>
+      {showType && (
+        <span className={`post-type post-type-${post.type}`}>{LABELS[post.type] ?? post.type}</span>
+      )}
       <span className="post-card-title">
         <Link href={href}>{post.title}</Link>
       </span>

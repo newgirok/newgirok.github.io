@@ -17,7 +17,7 @@ export default function Home() {
         </div>
         <div className="post-list">
           {recent.map((post) => (
-            <PostCard key={`${post.type}-${post.slug}`} post={post} />
+            <PostCard key={`${post.type}-${post.slug}`} post={post} showType />
           ))}
         </div>
       </section>
