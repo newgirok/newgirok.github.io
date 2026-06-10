@@ -3,17 +3,16 @@ import Link from 'next/link'
 export default function Header() {
   return (
     <header className="header">
-      <div className="container">
+      <div className="header-top">
         <Link href="/" className="header-logo">newgirok</Link>
-        <nav>
-          <ul className="header-nav">
-            <li><Link href="/til">TIL</Link></li>
-            <li><Link href="/posts">Posts</Link></li>
-            <li><Link href="/links">Links</Link></li>
-            <li><Link href="/about">About</Link></li>
-          </ul>
-        </nav>
+        <ul className="header-nav-primary">
+          <li><Link href="/til">TIL</Link></li>
+          <li><Link href="/posts">POSTS</Link></li>
+          <li><Link href="/links">LINKS</Link></li>
+          <li><Link href="/about">ABOUT</Link></li>
+        </ul>
       </div>
+      <hr className="header-divider" />
     </header>
   )
 }

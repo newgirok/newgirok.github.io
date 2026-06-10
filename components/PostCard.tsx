@@ -2,9 +2,15 @@ import Link from 'next/link'
 import type { Post } from '@/lib/posts'
 
 const TYPE_LABEL: Record<string, string> = {
-  til: 'TIL',
+  til: 'til',
   posts: 'post',
   links: 'links',
+}
+
+function formatDate(dateStr: string) {
+  if (!dateStr) return ''
+  const d = new Date(dateStr)
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
 export default function PostCard({ post }: { post: Post }) {
@@ -12,20 +18,11 @@ export default function PostCard({ post }: { post: Post }) {
 
   return (
     <div className="post-card">
-      <div className="post-card-row">
-        <span className="post-type">[{TYPE_LABEL[post.type]}]</span>
-        <span className="post-card-title">
-          <Link href={href}>{post.title}</Link>
-        </span>
-        <span className="post-card-date">{post.date}</span>
-      </div>
-      {post.tags.length > 0 && (
-        <div className="post-card-tags">
-          {post.tags.map((tag) => (
-            <span key={tag} className="tag">{tag}</span>
-          ))}
-        </div>
-      )}
+      <span className="post-card-date">{formatDate(post.date)}</span>
+      <span className="post-type">{TYPE_LABEL[post.type]}</span>
+      <span className="post-card-title">
+        <Link href={href}>{post.title}</Link>
+      </span>
     </div>
   )
 }

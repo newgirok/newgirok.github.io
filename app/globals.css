@@ -5,73 +5,32 @@
 }
 
 body {
-  font-family: Georgia, 'Apple SD Gothic Neo', 'Noto Serif KR', serif;
-  font-size: 18px;
-  line-height: 1.6;
-  color: #333;
-  background: #fff;
-  padding: 0 1rem;
+  background: #f96316;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  color: #000;
 }
 
 a {
   color: #0645ad;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 a:hover {
-  color: #0b0080;
+  text-decoration: underline;
 }
 
+/* White content box */
 .container {
-  max-width: 650px;
+  max-width: 680px;
   margin: 0 auto;
-}
-
-/* Header */
-.header {
-  padding: 1.5rem 0 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.header-logo {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #333;
-  text-decoration: none;
-  display: block;
-  margin-bottom: 0.4rem;
-}
-
-.header-logo:hover {
-  color: #333;
-  text-decoration: none;
-}
-
-.header-nav {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 1rem;
-}
-
-.header-nav a {
-  font-size: 0.95rem;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-/* Footer */
-.footer {
-  margin-top: 3rem;
-  padding: 1rem 0;
-  border-top: 1px solid #ccc;
-  font-size: 0.85rem;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #666;
+  background: #fff;
+  padding: 1.5rem 2rem 3rem;
+  min-height: 100vh;
 }
 
 /* Page wrapper */
 .page {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -80,118 +39,182 @@ a:hover {
   flex: 1;
 }
 
-/* Post type label */
-.post-type {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 0.78rem;
-  color: #666;
+/* ── Header ── */
+.header {
+  margin-bottom: 1.25rem;
 }
 
-/* Post Card — plain list item style */
-.post-card {
-  margin-bottom: 0.5rem;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-.post-card-row {
+.header-top {
   display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.post-card-title {
-  font-size: 1rem;
-  font-weight: normal;
-}
-
-.post-card-title a {
-  color: #0645ad;
-}
-
-.post-card-date {
-  font-size: 0.85rem;
-  color: #666;
-  white-space: nowrap;
-}
-
-.post-card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  margin-top: 0.1rem;
-}
-
-.tag {
-  font-size: 0.78rem;
-  color: #666;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-.tag::before { content: '#'; }
-
-/* Page Header */
-.page-header {
-  margin-bottom: 1.5rem;
-}
-
-.page-header h1 {
-  font-size: 1.5rem;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 0.3rem;
 }
 
-.page-header p {
-  font-size: 0.95rem;
+.header-logo {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #f96316;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.header-logo:hover {
+  text-decoration: none;
+  color: #f96316;
+}
+
+.header-nav-primary {
+  list-style: none;
+  text-align: right;
+  line-height: 1.8;
+}
+
+.header-nav-primary a {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.header-nav-primary a:hover {
+  text-decoration: underline;
+}
+
+.header-nav-secondary {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.3rem;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.header-nav-secondary a {
+  color: #333;
+  text-decoration: none;
+}
+
+.header-nav-secondary a:hover {
+  text-decoration: underline;
+}
+
+.header-nav-sep {
+  color: #f96316;
+  font-size: 0.7rem;
+}
+
+.header-divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 0.75rem 0;
+}
+
+/* ── Footer ── */
+.footer {
+  margin-top: 2rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e0e0e0;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* ── Post Card (list item) ── */
+.post-card {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  line-height: 1.6;
+  flex-wrap: wrap;
+}
+
+.post-card-date {
+  font-size: 0.82rem;
   color: #555;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  white-space: nowrap;
+  min-width: 52px;
 }
 
-/* Post List */
+.post-type {
+  font-size: 0.82rem;
+  color: #888;
+  white-space: nowrap;
+}
+
+.post-card-title a {
+  font-size: 0.95rem;
+  color: #0645ad;
+}
+
+/* ── Post List ── */
 .post-list {
-  margin-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
 }
 
-/* Home sections */
+/* ── Home Sections ── */
 .home-section {
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.75rem;
 }
 
 .home-section-header {
   display: flex;
-  align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  align-items: baseline;
+  margin-bottom: 0.4rem;
 }
 
 .home-section-header h2 {
-  font-size: 1.1rem;
-  font-weight: bold;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .home-section-header a {
-  font-size: 0.85rem;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.82rem;
+  color: #888;
 }
 
-/* Article */
+/* ── Page Header (list pages) ── */
+.page-header {
+  margin-bottom: 1rem;
+}
+
+.page-header h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.page-header p {
+  font-size: 0.875rem;
+  color: #555;
+}
+
+/* ── Article ── */
 .article-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .article-header h1 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
+  font-weight: 700;
   line-height: 1.3;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .article-meta {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 0.82rem;
+  color: #555;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: baseline;
+  gap: 0.4rem;
+  align-items: center;
 }
 
 .article-meta-tags {
@@ -200,57 +223,66 @@ a:hover {
   flex-wrap: wrap;
 }
 
-/* MDX Content */
+.tag {
+  font-size: 0.78rem;
+  color: #666;
+}
+
+.tag::before { content: '#'; }
+
+/* ── Prose (MDX content) ── */
 .prose {
-  font-size: 1rem;
+  font-size: 0.95rem;
   line-height: 1.7;
 }
 
 .prose h2 {
-  font-size: 1.3rem;
-  margin: 1.8rem 0 0.6rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 1.75rem 0 0.5rem;
 }
 
 .prose h3 {
-  font-size: 1.1rem;
-  margin: 1.4rem 0 0.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 1.25rem 0 0.4rem;
 }
 
 .prose p {
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
 }
 
 .prose ul,
 .prose ol {
   padding-left: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
 }
 
 .prose li {
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
 }
 
 .prose blockquote {
   border-left: 3px solid #ccc;
-  padding-left: 1rem;
+  padding-left: 0.9rem;
   color: #555;
-  margin: 1rem 0;
+  margin: 0.9rem 0;
 }
 
 .prose code {
   font-family: 'Fira Code', Consolas, Monaco, monospace;
   font-size: 0.875em;
   background: #f5f5f5;
-  padding: 0.1em 0.35em;
+  padding: 0.1em 0.3em;
   border: 1px solid #ddd;
 }
 
 .prose pre {
   background: #f5f5f5;
   border: 1px solid #ddd;
-  padding: 1rem;
+  padding: 0.9rem;
   overflow-x: auto;
-  margin: 1rem 0;
+  margin: 0.9rem 0;
 }
 
 .prose pre code {
@@ -258,26 +290,24 @@ a:hover {
   border: none;
   padding: 0;
   font-size: 0.875rem;
-  color: #333;
 }
 
 .prose hr {
   border: none;
-  border-top: 1px solid #ccc;
-  margin: 1.5rem 0;
+  border-top: 1px solid #ddd;
+  margin: 1.25rem 0;
 }
 
 .prose table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1rem 0;
-  font-size: 0.95rem;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0.9rem 0;
+  font-size: 0.9rem;
 }
 
 .prose th,
 .prose td {
-  padding: 0.4rem 0.6rem;
+  padding: 0.35rem 0.6rem;
   border: 1px solid #ccc;
   text-align: left;
 }
@@ -286,26 +316,34 @@ a:hover {
   background: #f5f5f5;
 }
 
-/* Back link */
+/* ── Back link ── */
 .back-link {
   display: inline-block;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 0.875rem;
-  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+  margin-bottom: 1.25rem;
 }
 
-/* About */
+/* ── About ── */
 .about-content h1 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
 }
 
 .about-placeholder {
-  color: #666;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #555;
+  font-size: 0.9rem;
 }
 
-@media (max-width: 480px) {
-  body { font-size: 16px; }
-  .article-header h1 { font-size: 1.3rem; }
+@media (max-width: 680px) {
+  .container {
+    padding: 1rem 1.25rem 2rem;
+    min-height: 100vh;
+  }
+  .header-logo {
+    font-size: 1.6rem;
+  }
+  .article-header h1 {
+    font-size: 1.25rem;
+  }
 }
