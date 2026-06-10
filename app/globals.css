@@ -22,10 +22,11 @@ a:hover {
 
 /* White content box */
 .container {
-  max-width: 680px;
+  width: 100%;
+  max-width: 860px;
   margin: 0 auto;
   background: #fff;
-  padding: 1.5rem 2rem 3rem;
+  padding: 1.5rem 2.5rem 3rem;
   min-height: 100vh;
 }
 
@@ -104,6 +105,10 @@ a:hover {
   text-decoration: underline;
 }
 
+.header-nav-secondary-wrap {
+  margin-top: 0.3rem;
+}
+
 .header-nav-sep {
   color: #f96316;
   font-size: 0.7rem;
@@ -111,8 +116,8 @@ a:hover {
 
 .header-divider {
   border: none;
-  border-top: 1px solid #e0e0e0;
-  margin: 0.75rem 0;
+  border-top: 3px solid #f96316;
+  margin: 0.6rem 0;
 }
 
 /* ── Footer ── */
