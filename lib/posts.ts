@@ -125,7 +125,7 @@ export function getProjectPosts(projectSlug: string): ProjectPost[] {
         content,
       }
     })
-    .sort((a, b) => (a.date < b.date ? -1 : 1))
+    .sort((a, b) => (a.date > b.date ? -1 : 1))
 }
 
 export function getProjectPost(projectSlug: string, slug: string): ProjectPost | null {

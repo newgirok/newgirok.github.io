@@ -39,9 +39,8 @@ export default async function ProjectDetailPage({ params }: Props) {
         <h1>{meta?.title ?? project}</h1>
       </div>
       <div className="post-list">
-        {posts.map((post, i) => (
-          <Link key={post.slug} href={`/projects/${project}/${post.slug}`} className="post-card post-card--numbered">
-            <span className="post-type post-type-projects">{String(i + 1).padStart(2, '0')}</span>
+        {posts.map((post) => (
+          <Link key={post.slug} href={`/projects/${project}/${post.slug}`} className="post-card">
             <span className="post-card-title-text">{post.title}</span>
             <span className="post-card-date">{formatDate(post.date)}</span>
           </Link>
