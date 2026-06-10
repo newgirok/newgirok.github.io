@@ -5,14 +5,11 @@
 }
 
 :root {
-  --accent-til:   #16a34a;
-  --accent-post:  #2563eb;
-  --accent-links: #ea580c;
-  --text:         #111;
-  --muted:        #888;
-  --faint:        #ccc;
-  --border:       #e8e8e8;
-  --bg:           #fff;
+  --text:   #111;
+  --muted:  #888;
+  --faint:  #ccc;
+  --border: #e8e8e8;
+  --bg:     #fff;
 }
 
 body {
@@ -112,9 +109,9 @@ a {
   text-align: right;
 }
 
-.post-type-til   { color: var(--accent-til); }
-.post-type-posts { color: var(--accent-post); }
-.post-type-links { color: var(--accent-links); }
+.post-type-til,
+.post-type-posts,
+.post-type-links { color: var(--muted); }
 
 .post-card-title a {
   font-size: 0.95rem;
@@ -280,7 +277,7 @@ a {
 .prose th { background: #f9f9f9; font-weight: 600; }
 
 .prose a {
-  color: var(--accent-post);
+  color: var(--text);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
