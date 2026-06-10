@@ -4,8 +4,8 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: { default: 'newgirok', template: '%s | newgirok' },
-  description: '5년차 풀스택 개발자의 TIL, 기술 글, 링크 큐레이션',
+  title: { default: '개인의 기록', template: '%s | 개인의 기록' },
+  description: '개인의 기록',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

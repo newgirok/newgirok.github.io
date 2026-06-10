@@ -10,7 +10,6 @@ export default function ProjectList() {
     <>
       <div className="page-header">
         <h1>Projects</h1>
-        <p>직접 만든 것들의 기록</p>
       </div>
       <div className="post-list">
         {posts.map((post) => (

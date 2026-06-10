@@ -10,7 +10,6 @@ export default function LinkList() {
     <>
       <div className="page-header">
         <h1>Links</h1>
-        <p>읽을 만한 기술 링크 큐레이션</p>
       </div>
       <div className="post-list">
         {posts.map((post) => (
