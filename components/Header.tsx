@@ -9,6 +9,7 @@ export default function Header() {
           <ul className="header-nav">
             <li><Link href="/til">TIL</Link></li>
             <li><Link href="/posts">Posts</Link></li>
+            <li><Link href="/projects">Projects</Link></li>
             <li><Link href="/links">Links</Link></li>
             <li><Link href="/about">About</Link></li>
           </ul>

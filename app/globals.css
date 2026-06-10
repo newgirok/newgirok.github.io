@@ -132,7 +132,8 @@ a {
 
 .post-type-til,
 .post-type-posts,
-.post-type-links { color: var(--muted); }
+.post-type-links,
+.post-type-projects { color: var(--muted); }
 
 .post-card-title a {
   font-size: 0.95rem;

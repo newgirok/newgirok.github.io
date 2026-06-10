@@ -6,6 +6,7 @@ export default function Home() {
   const recent = getAllPosts().slice(0, 5)
   const tils = getPostsByType('til').slice(0, 3)
   const posts = getPostsByType('posts').slice(0, 3)
+  const projects = getPostsByType('projects').slice(0, 3)
   const links = getPostsByType('links').slice(0, 3)
 
   return (
@@ -40,6 +41,18 @@ export default function Home() {
         </div>
         <div className="post-list">
           {posts.map((post) => (
+            <PostCard key={post.slug} post={post} />
+          ))}
+        </div>
+      </section>
+
+      <section className="home-section">
+        <div className="home-section-header">
+          <h2>Projects</h2>
+          <Link href="/projects">전체 보기 →</Link>
+        </div>
+        <div className="post-list">
+          {projects.map((post) => (
             <PostCard key={post.slug} post={post} />
           ))}
         </div>

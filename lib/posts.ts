@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 
-export type PostType = 'til' | 'posts' | 'links'
+export type PostType = 'til' | 'posts' | 'links' | 'projects'
 
 export interface Post {
   slug: string
@@ -63,5 +63,6 @@ export function getAllPosts(): Post[] {
     ...getPostsByType('posts'),
     ...getPostsByType('til'),
     ...getPostsByType('links'),
+    ...getPostsByType('projects'),
   ].sort((a, b) => (a.date > b.date ? -1 : 1))
 }
