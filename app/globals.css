@@ -26,11 +26,12 @@
 }
 
 :root {
-  --text:   #111;
-  --muted:  #888;
-  --faint:  #ccc;
-  --border: #e8e8e8;
-  --bg:     #fff;
+  --text:     #111;
+  --muted:    #888;
+  --faint:    #ccc;
+  --border:   #e8e8e8;
+  --bg:       #fff;
+  --bg-outer: #f0efed;
 }
 
 body {
@@ -38,7 +39,7 @@ body {
   font-size: 16px;
   line-height: 1.65;
   color: var(--text);
-  background: var(--bg);
+  background: var(--bg-outer);
 }
 
 a {
@@ -52,7 +53,7 @@ a {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  padding: 0 1.5rem;
+  padding: 0 2rem;
 }
 
 .container {
@@ -61,6 +62,8 @@ a {
   display: flex;
   flex-direction: column;
   flex: 1;
+  background: var(--bg);
+  padding: 0 2.5rem;
 }
 
 /* ── Header ── */
