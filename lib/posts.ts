@@ -35,6 +35,11 @@ export interface ProjectMeta {
 
 const contentDir = path.join(process.cwd(), 'content')
 
+function sortByDateDesc(a: { date: string; slug: string }, b: { date: string; slug: string }) {
+  if (a.date !== b.date) return a.date > b.date ? -1 : 1
+  return a.slug > b.slug ? -1 : 1
+}
+
 function formatSlug(slug: string): string {
   return slug.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
@@ -61,7 +66,7 @@ export function getPostsByType(type: PostType): Post[] {
         url: data.url,
       }
     })
-    .sort((a, b) => (a.date > b.date ? -1 : 1))
+    .sort(sortByDateDesc)
 }
 
 export function getPostBySlug(type: PostType, slug: string): Post | null {
@@ -87,7 +92,7 @@ export function getAllPosts(): Post[] {
   return [
     ...getPostsByType('posts'),
     ...getPostsByType('links'),
-  ].sort((a, b) => (a.date > b.date ? -1 : 1))
+  ].sort(sortByDateDesc)
 }
 
 export function getProjectMetas(): ProjectMeta[] {
@@ -128,7 +133,7 @@ export function getProjectPosts(projectSlug: string): ProjectPost[] {
         content,
       }
     })
-    .sort((a, b) => (a.date > b.date ? -1 : 1))
+    .sort(sortByDateDesc)
 }
 
 export function getProjectPost(projectSlug: string, slug: string): ProjectPost | null {
