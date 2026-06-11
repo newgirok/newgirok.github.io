@@ -150,6 +150,11 @@ a {
 .post-type-links,
 .post-type-projects { color: var(--muted); }
 
+.post-card-title {
+  min-width: 0;
+  overflow: hidden;
+}
+
 .post-card-title a {
   font-size: 0.95rem;
   color: var(--text);
