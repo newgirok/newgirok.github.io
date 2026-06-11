@@ -1,0 +1,153 @@
+---
+title: "씬 설계 — 게임 흐름을 어떻게 나눌까"
+date: "2026-05-20"
+project: "Lion Survival"
+tags: ["phaser3", "scene", "architecture"]
+---
+
+Phaser의 핵심 개념이 씬(Scene)이다.
+
+화면 하나 = 씬 하나. 씬끼리는 독립적으로 동작하고, `this.scene.start("씬이름")`으로 전환한다.
+
+게임 흐름을 먼저 그려봤다.
+
+```
+LoadingScene → MainScene → PlayingScene → GameClearScene
+                                        → GameOverScene
+```
+
+각 씬이 맡을 역할도 명확했다.
+
+---
+
+## LoadingScene — 에셋 로딩 + 애니메이션 등록
+
+이전 포스트에서 다뤘다. 로딩 끝나면 바로 `mainScene`으로 전환.
+
+```js
+create() {
+  this.scene.start("mainScene");
+  // 애니메이션 등록 (전역 공유)
+  this.anims.create({ key: "player_anim", ... });
+  this.anims.create({ key: "mob1_anim", ... });
+  // ...
+}
+```
+
+`anims`는 전역으로 등록되기 때문에 `LoadingScene`에서 한 번만 만들면 다른 씬에서도 그냥 쓸 수 있다.
+
+---
+
+## MainScene — 타이틀 화면
+
+엔터 누르면 게임 시작. 단순하다.
+
+```js
+this.input.keyboard.on("keydown-ENTER", () => {
+  this.scene.start("playGame");
+});
+```
+
+---
+
+## PlayingScene — 게임의 전부
+
+실제 게임이 돌아가는 씬이다. `create()`에서 초기화, `update()`에서 매 프레임 갱신.
+
+**create() — 한 번만 실행되는 초기화**
+
+```js
+create() {
+  // 사운드 등록
+  this.m_beamSound = this.sound.add("audio_beam");
+  this.m_scratchSound = this.sound.add("audio_scratch");
+  // ...
+
+  // 플레이어 생성
+  this.m_player = new Player(this);
+
+  // 배경
+  setBackground(this, "background1");
+
+  // 키보드 입력
+  this.m_cursorKeys = this.input.keyboard.createCursorKeys();
+
+  // 카메라가 플레이어를 따라다님
+  this.cameras.main.startFollow(this.m_player);
+
+  // 몬스터 그룹
+  this.m_mobs = this.physics.add.group();
+
+  // 무기 그룹 (dynamic = 날아가는 것, static = 고정 위치)
+  this.m_weaponDynamic = this.add.group();
+  this.m_weaponStatic = this.add.group();
+
+  // 경험치 오브젝트 그룹
+  this.m_expUps = this.physics.add.group();
+
+  // 충돌 등록
+  this.physics.add.overlap(this.m_player, this.m_mobs, ...);
+  this.physics.add.overlap(this.m_weaponDynamic, this.m_mobs, ...);
+  this.physics.add.overlap(this.m_weaponStatic, this.m_mobs, ...);
+  this.physics.add.overlap(this.m_player, this.m_expUps, ...);
+
+  // UI
+  this.m_topBar = new TopBar(this);
+  this.m_expBar = new ExpBar(this, 50);
+}
+```
+
+충돌을 `physics.add.overlap`으로 등록하는 게 Phaser의 방식이다. 충돌이 발생하면 콜백이 호출된다. 여기서 데미지 처리, 경험치 획득 로직이 실행된다.
+
+**update() — 매 프레임 갱신**
+
+```js
+update() {
+  this.movePlayerManager();
+
+  // 배경 타일을 플레이어 위치에 맞게 스크롤
+  this.m_background.tilePositionX = this.m_player.x - Config.width / 2;
+  this.m_background.tilePositionY = this.m_player.y - Config.height / 2;
+
+  // 가장 가까운 몬스터를 찾아서 무기가 조준할 수 있게 저장
+  this.m_closest = this.physics.closest(this.m_player, this.m_mobs.getChildren());
+}
+```
+
+`update()`는 최대한 가볍게 유지했다. 실제 로직은 매니저 함수들에 위임한다.
+
+---
+
+## 레벨업 시스템 — afterLevelUp()
+
+경험치가 꽉 차면 `pause(this, "levelup")`으로 일시정지 씬이 뜨고, 선택 후 `afterLevelUp()`이 호출된다.
+
+```js
+afterLevelUp() {
+  this.m_topBar.gainLevel();
+
+  switch (this.m_topBar.m_level) {
+    case 2:
+      removeOldestMobEvent(this);
+      addMobEvent(this, 1000, "mob2", "mob2_anim", 20, 0.8);
+      setAttackScale(this, "claw", 4);
+      break;
+    case 3:
+      addAttackEvent(this, "catnip", 10, 2);
+      break;
+    // ...
+    case 7:
+      addMob(this, "lion", "lion_anim", 200, 0); // 보스 등장
+      setBackground(this, "background2");
+      break;
+  }
+}
+```
+
+레벨이 올라갈수록 강한 몬스터로 교체되고 무기가 강화된다. 7레벨에서 보스인 라이온이 등장하면서 배경도 바뀐다.
+
+---
+
+씬 설계가 제대로 잡혀있으면 이후 구현이 훨씬 수월하다.
+
+`PlayingScene`이 직접 하는 건 거의 없다. 초기화하고, 충돌 등록하고, 매니저한테 넘긴다. 그게 전부다.

@@ -1,0 +1,125 @@
+---
+title: "Phaser3로 브라우저 게임 시작하기"
+date: "2026-05-20"
+project: "Lion Survival"
+tags: ["phaser3", "webpack", "javascript", "game"]
+---
+
+뱀파이어 서바이버즈 같은 게임을 직접 만들어보고 싶었다.
+
+끝없이 몰려오는 몬스터, 자동으로 공격하는 무기, 경험치 쌓으면서 성장하는 캐릭터. 구조는 단순해 보이는데 구현하면서 배울 게 많을 것 같았다.
+
+브라우저에서 돌아가는 게임을 만들기로 했다. 설치 없이 링크 하나로 바로 플레이할 수 있게.
+
+---
+
+## Phaser3 선택
+
+브라우저 게임 엔진 선택지는 여러 개였다.
+
+- **Unity WebGL** — 강력하지만 번들 크기가 크고 빌드가 무겁다
+- **PixiJS** — 렌더링 라이브러리에 가깝다. 게임 루프, 물리, 입력은 직접 다 짜야 한다
+- **Phaser3** — 씬 관리, 물리 엔진, 애니메이션, 입력까지 다 들어있다
+
+Phaser3로 정했다. 게임에 필요한 게 다 있고, 문서도 잘 돼있다.
+
+물리 엔진은 Arcade Physics로 설정했다. Matter.js가 더 정교하지만 서바이벌 게임에 복잡한 물리는 필요 없다. 충돌 감지만 되면 된다.
+
+---
+
+## Config.js — 게임의 시작점
+
+`Phaser.Game`을 만들 때 설정 객체 하나를 넘긴다.
+
+```js
+// src/Config.js
+{
+  type: Phaser.AUTO,
+  width: 800,
+  height: 600,
+  backgroundColor: "#000000",
+  pixelArt: true,
+  physics: {
+    default: "arcade",
+    arcade: {
+      debug: process.env.NODE_ENV === "true",
+    },
+  },
+  scene: [LoadingScene, MainScene, PlayingScene, GameClearScene, GameOverScene],
+}
+```
+
+`pixelArt: true`는 스프라이트 확대 시 블러 처리를 막아준다. 픽셀 아트 느낌 살리려면 필수다.
+
+`debug` 모드는 환경변수로 켰다 껐다 한다. 켜면 히트박스가 분홍색으로 보인다. 충돌 조정할 때 엄청 유용하다.
+
+씬 배열에 순서대로 등록하면 첫 번째 씬부터 자동으로 시작된다.
+
+---
+
+## LoadingScene — 에셋 다 때려박기
+
+Phaser에서 에셋은 게임 시작 전에 전부 미리 로딩해야 한다. `LoadingScene`이 그 역할이다.
+
+```js
+preload() {
+  // 배경 이미지 3종
+  this.load.image("background1", bgImg1);
+  this.load.image("background2", bgImg2);
+  this.load.image("background3", bgImg3);
+
+  // 스프라이트시트 (프레임 단위로 쪼개서 애니메이션에 쓴다)
+  this.load.spritesheet("player", playerImg, {
+    frameWidth: 32,
+    frameHeight: 36,
+  });
+  this.load.spritesheet("mob1", mobImg1, { frameWidth: 28, frameHeight: 28 });
+  // ... mob2, mob3, mob4, lion
+
+  // 사운드 12종
+  this.load.audio("audio_beam", beamOgg);
+  this.load.audio("audio_scratch", scratchOgg);
+  // ...
+}
+```
+
+`create()`에서는 로딩 완료 후 애니메이션을 등록한다.
+
+```js
+this.anims.create({
+  key: "player_anim",
+  frames: this.anims.generateFrameNumbers("player"),
+  frameRate: 12,
+  repeat: -1,
+});
+```
+
+`repeat: -1`은 무한 반복이다. 이동 중에는 이 애니메이션, 멈추면 `player_idle`로 바꾼다.
+
+---
+
+## Webpack 설정
+
+게임을 번들링해서 배포하려면 Webpack이 필요하다. `webpack/` 폴더에 설정을 분리했다.
+
+```
+webpack/
+  base.js    — 공통 설정 (babel, file-loader 등)
+  dev.js     — 개발 서버 설정
+  prod.js    — 프로덕션 빌드 설정
+```
+
+이미지, 사운드 파일은 `file-loader`로 처리한다. import하면 해시된 파일명으로 `/dist`에 복사된다.
+
+```json
+"start": "webpack serve --config webpack/dev.js",
+"build": "webpack --config webpack/prod.js"
+```
+
+`npm start` 하나로 `localhost:8080`에 개발 서버가 뜬다.
+
+---
+
+이 시점엔 검은 화면에 "Loading game..."만 떴다.
+
+그래도 이게 뼈대다. 씬이 등록됐고, 에셋이 로딩됐다. 여기서부터 쌓으면 된다.

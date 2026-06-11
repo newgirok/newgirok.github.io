@@ -1,0 +1,162 @@
+---
+title: "캐릭터 구현 — Player와 Mob"
+date: "2026-05-20"
+project: "Lion Survival"
+tags: ["phaser3", "sprite", "physics", "character"]
+---
+
+캐릭터가 움직여야 게임이다.
+
+Player와 Mob 모두 `Phaser.Physics.Arcade.Sprite`를 상속한다. Arcade Physics에 자동으로 등록되기 때문에 충돌 감지를 Phaser가 알아서 해준다.
+
+---
+
+## Player — 이동과 피격
+
+**생성**
+
+```js
+constructor(scene) {
+  // 화면 중앙에 플레이어 생성
+  super(scene, scene.scale.width / 2, scene.scale.height / 2, "player");
+  scene.add.existing(this);
+  scene.physics.world.enableBody(this);
+  this.setScale(1.5);
+  this.setDepth(5);
+}
+```
+
+`scene.add.existing(this)`와 `scene.physics.world.enableBody(this)` 이 두 줄이 핵심이다. 씬에 추가하고 물리 엔진에 등록한다.
+
+**이동**
+
+`PlayingScene.update()`에서 매 프레임 `move(vector)`가 호출된다.
+
+```js
+move(vector) {
+  const SPEED = 200;
+  this.setVelocity(vector[0] * SPEED, vector[1] * SPEED);
+
+  // 왼쪽 이동이면 스프라이트 좌우 반전
+  if (vector[0] < 0) this.setFlipX(true);
+  else if (vector[0] > 0) this.setFlipX(false);
+}
+```
+
+대각선 이동 시 속도가 빨라지는 걸 막으려면 벡터를 정규화해야 하는데, 이 버전에선 그냥 뒀다. 서바이벌 게임 특성상 크게 문제가 되지 않았다.
+
+**피격 처리**
+
+```js
+hitByMob(damage) {
+  if (!this.m_canBeAttacked) return;
+
+  this.scene.m_hurtSound.play();
+  this.scene.m_topBar.decreaseHp(damage);
+
+  if (this.scene.m_topBar.m_hp <= 0) {
+    this.scene.scene.start("gameOver");
+    return;
+  }
+  this.setCooldown();
+}
+```
+
+`m_canBeAttacked` 플래그가 false면 피격을 무시한다. 맞고 나서 1초간 무적이다. 이게 없으면 몬스터와 닿는 순간 HP가 순식간에 0이 된다.
+
+**무적 쿨다운**
+
+```js
+setCooldown() {
+  this.m_canBeAttacked = false;
+  // 투명도로 무적 상태 시각적 표시
+  this.alpha = 0.5;
+
+  this.scene.time.addEvent({
+    delay: 1000,
+    callback: () => {
+      this.m_canBeAttacked = true;
+      this.alpha = 1;
+    },
+    loop: false,
+  });
+}
+```
+
+---
+
+## Mob — AI와 드롭
+
+몬스터는 생성 시점에 HP, 속도 배율, 아이템 드롭률을 받는다.
+
+```js
+constructor(scene, x, y, texture, animKey, initHp, dropRate = 0.5)
+```
+
+**플레이어 추적 AI**
+
+```js
+// 100ms마다 플레이어 방향으로 이동
+this.m_moveEvent = scene.time.addEvent({
+  delay: 100,
+  callback: this.move,
+  callbackScope: this,
+  loop: true,
+});
+
+move() {
+  const dx = this.scene.m_player.x - this.x;
+  const dy = this.scene.m_player.y - this.y;
+  const angle = Math.atan2(dy, dx);
+  const speed = this.m_speed;
+  this.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
+  // 방향에 따라 좌우 반전
+  if (dx < 0) this.setFlipX(true);
+  else this.setFlipX(false);
+}
+```
+
+100ms마다 플레이어 방향을 재계산한다. 매 프레임이 아니라 주기적으로 갱신하는 게 성능에 유리하다. 몬스터가 수십 마리 있을 때 특히.
+
+**피격과 사망**
+
+```js
+hitByDynamic(weapon, damage) {
+  // dynamic 무기(빔)는 맞고 나서 파괴됨
+  weapon.destroy();
+  this.hp -= damage;
+  if (this.hp <= 0) this.die();
+  else this.setAlpha(0.5); // 피격 시 투명도 표시
+}
+
+hitByStatic(damage) {
+  // static 무기(catnip)는 쿨다운으로 처리
+  if (!this.m_canBeAttacked) return;
+  this.hp -= damage;
+  if (this.hp <= 0) this.die();
+  this.setCooldown();
+}
+```
+
+dynamic과 static 무기의 피격 처리 방식이 다르다. 빔은 맞으면 사라지고, 필드에 깔려있는 캣닢은 쿨다운으로 관리한다.
+
+**사망 처리**
+
+```js
+die() {
+  this.scene.m_explosionSound.play();
+  // 폭발 이펙트 생성
+  new Explosion(this.scene, this.x, this.y);
+  // 확률적으로 경험치 드롭
+  if (Math.random() < this.m_dropRate) new ExpUp(this.scene, this.x, this.y);
+  this.m_killCount++;
+  this.m_moveEvent.remove();
+  this.destroy();
+}
+```
+
+---
+
+플레이어와 몬스터 모두 Phaser 스프라이트를 상속해서 물리 엔진과 자연스럽게 연결된다.
+
+캐릭터가 씬에서 직접 로직을 처리하는 게 아니라 스스로 상태를 관리한다. `PlayingScene`은 충돌을 등록하고 결과를 받기만 하면 된다.
