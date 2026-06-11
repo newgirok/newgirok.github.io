@@ -6,6 +6,7 @@ import Footer from '@/components/Footer'
 export const metadata: Metadata = {
   title: { default: '개인의 기록', template: '%s | 개인의 기록' },
   description: '개인의 기록',
+  themeColor: '#f0efed',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

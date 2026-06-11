@@ -25,6 +25,10 @@
   padding: 0;
 }
 
+html {
+  background: #f0efed;
+}
+
 :root {
   --text:     #111;
   --muted:    #888;
