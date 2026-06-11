@@ -1,4 +1,4 @@
-import { getAllPosts, getPostsByType, getProjectMetas } from '@/lib/posts'
+import { getAllRecent, getPostsByType, getProjectMetas } from '@/lib/posts'
 import PostCard from '@/components/PostCard'
 import ProjectCard from '@/components/ProjectCard'
 import Link from 'next/link'
@@ -7,8 +7,14 @@ function padToFive<T>(arr: T[]): (T | null)[] {
   return [...arr, ...Array(Math.max(0, 5 - arr.length)).fill(null)]
 }
 
+function formatDate(dateStr: string) {
+  if (!dateStr) return ''
+  const d = new Date(dateStr)
+  return d.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })
+}
+
 export default function Home() {
-  const recent = getAllPosts().slice(0, 5)
+  const recent = getAllRecent().slice(0, 5)
   const projects = getProjectMetas().slice(0, 5)
   const posts = getPostsByType('posts').slice(0, 5)
   const links = getPostsByType('links').slice(0, 5)
@@ -20,11 +26,19 @@ export default function Home() {
           <h2>최근 글</h2>
         </div>
         <div className="post-list">
-          {padToFive(recent).map((post, i) =>
-            post ? (
-              <PostCard key={`${post.type}-${post.slug}`} post={post} />
+          {padToFive(recent).map((item, i) =>
+            item ? (
+              <div key={`${item.category}-${item.slug}`} className="post-card post-card--labeled">
+                <span className="post-type">{item.category}</span>
+                <span className="post-card-title">
+                  <Link href={item.href} {...(item.isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                    {item.title}
+                  </Link>
+                </span>
+                <span className="post-card-date">{formatDate(item.date)}</span>
+              </div>
             ) : (
-              <div key={`recent-empty-${i}`} className="post-card" />
+              <div key={`recent-empty-${i}`} className="post-card post-card--labeled" />
             )
           )}
         </div>

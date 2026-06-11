@@ -95,6 +95,43 @@ export function getAllPosts(): Post[] {
   ].sort(sortByDateDesc)
 }
 
+export type RecentCategory = 'POST' | 'LINK' | 'PROJ'
+
+export interface RecentItem {
+  slug: string
+  title: string
+  date: string
+  href: string
+  isExternal: boolean
+  category: RecentCategory
+}
+
+export function getAllRecent(): RecentItem[] {
+  const posts = getPostsByType('posts').map<RecentItem>(p => ({
+    slug: p.slug, title: p.title, date: p.date,
+    href: `/posts/${p.slug}`, isExternal: false, category: 'POST',
+  }))
+  const links = getPostsByType('links').map<RecentItem>(p => ({
+    slug: p.slug, title: p.title, date: p.date,
+    href: p.url ?? `/links/${p.slug}`, isExternal: !!p.url, category: 'LINK',
+  }))
+
+  const projectsDir = path.join(contentDir, 'projects')
+  const projItems: RecentItem[] = []
+  if (fs.existsSync(projectsDir)) {
+    for (const pSlug of fs.readdirSync(projectsDir).filter(f => fs.statSync(path.join(projectsDir, f)).isDirectory())) {
+      for (const pp of getProjectPosts(pSlug)) {
+        projItems.push({
+          slug: pp.slug, title: pp.title, date: pp.date,
+          href: `/projects/${pSlug}/${pp.slug}`, isExternal: false, category: 'PROJ',
+        })
+      }
+    }
+  }
+
+  return [...posts, ...links, ...projItems].sort(sortByDateDesc)
+}
+
 export function getProjectMetas(): ProjectMeta[] {
   const projectsDir = path.join(contentDir, 'projects')
   if (!fs.existsSync(projectsDir)) return []
