@@ -95,7 +95,7 @@ export function getAllPosts(): Post[] {
   ].sort(sortByDateDesc)
 }
 
-export type RecentCategory = 'POST' | 'LINK' | 'PROJ'
+export type RecentCategory = 'posts' | 'links' | 'projects'
 
 export interface RecentItem {
   slug: string
@@ -106,14 +106,24 @@ export interface RecentItem {
   category: RecentCategory
 }
 
+const RECENT_LABELS: Record<RecentCategory, string> = {
+  posts: '글',
+  links: '링크',
+  projects: '프로젝트',
+}
+
+export function getRecentLabel(category: RecentCategory) {
+  return RECENT_LABELS[category]
+}
+
 export function getAllRecent(): RecentItem[] {
   const posts = getPostsByType('posts').map<RecentItem>(p => ({
     slug: p.slug, title: p.title, date: p.date,
-    href: `/posts/${p.slug}`, isExternal: false, category: 'POST',
+    href: `/posts/${p.slug}`, isExternal: false, category: 'posts',
   }))
   const links = getPostsByType('links').map<RecentItem>(p => ({
     slug: p.slug, title: p.title, date: p.date,
-    href: p.url ?? `/links/${p.slug}`, isExternal: !!p.url, category: 'LINK',
+    href: p.url ?? `/links/${p.slug}`, isExternal: !!p.url, category: 'links',
   }))
 
   const projectsDir = path.join(contentDir, 'projects')
@@ -123,7 +133,7 @@ export function getAllRecent(): RecentItem[] {
       for (const pp of getProjectPosts(pSlug)) {
         projItems.push({
           slug: pp.slug, title: pp.title, date: pp.date,
-          href: `/projects/${pSlug}/${pp.slug}`, isExternal: false, category: 'PROJ',
+          href: `/projects/${pSlug}/${pp.slug}`, isExternal: false, category: 'projects',
         })
       }
     }

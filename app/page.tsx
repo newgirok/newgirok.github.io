@@ -1,4 +1,4 @@
-import { getAllRecent, getPostsByType, getProjectMetas } from '@/lib/posts'
+import { getAllRecent, getRecentLabel, getPostsByType, getProjectMetas } from '@/lib/posts'
 import PostCard from '@/components/PostCard'
 import ProjectCard from '@/components/ProjectCard'
 import Link from 'next/link'
@@ -29,7 +29,7 @@ export default function Home() {
           {padToFive(recent).map((item, i) =>
             item ? (
               <div key={`${item.category}-${item.slug}`} className="post-card post-card--labeled">
-                <span className="post-type">{item.category}</span>
+                <span className={`post-type post-type-${item.category}`}>{getRecentLabel(item.category)}</span>
                 <span className="post-card-title">
                   <Link href={item.href} {...(item.isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
                     {item.title}
