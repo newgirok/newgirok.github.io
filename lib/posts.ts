@@ -12,6 +12,7 @@ export interface Post {
   tags: string[]
   excerpt: string
   content: string
+  url?: string
 }
 
 export interface ProjectPost {
@@ -57,6 +58,7 @@ export function getPostsByType(type: PostType): Post[] {
         tags: data.tags ?? [],
         excerpt: data.excerpt ?? '',
         content,
+        url: data.url,
       }
     })
     .sort((a, b) => (a.date > b.date ? -1 : 1))
@@ -77,6 +79,7 @@ export function getPostBySlug(type: PostType, slug: string): Post | null {
     tags: data.tags ?? [],
     excerpt: data.excerpt ?? '',
     content,
+    url: data.url,
   }
 }
 
