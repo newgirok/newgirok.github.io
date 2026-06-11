@@ -139,7 +139,14 @@ export function getAllRecent(): RecentItem[] {
     }
   }
 
-  return [...posts, ...links, ...projItems].sort(sortByDateDesc)
+  const CATEGORY_PRIORITY: Record<RecentCategory, number> = { posts: 0, projects: 1, links: 2 }
+
+  return [...posts, ...links, ...projItems].sort((a, b) => {
+    if (a.date !== b.date) return a.date > b.date ? -1 : 1
+    const cp = CATEGORY_PRIORITY[a.category] - CATEGORY_PRIORITY[b.category]
+    if (cp !== 0) return cp
+    return a.slug > b.slug ? -1 : 1
+  })
 }
 
 export function getProjectMetas(): ProjectMeta[] {
