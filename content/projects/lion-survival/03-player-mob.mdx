@@ -1,4 +1,4 @@
----
+﻿---
 title: "캐릭터 구현 — Player와 Mob"
 date: "2026-05-20"
 project: "Lion Survival"
@@ -8,8 +8,6 @@ tags: ["phaser3", "sprite", "physics", "character"]
 캐릭터가 움직여야 게임이다.
 
 Player와 Mob 모두 `Phaser.Physics.Arcade.Sprite`를 상속한다. Arcade Physics에 자동으로 등록되기 때문에 충돌 감지를 Phaser가 알아서 해준다.
-
----
 
 ## Player — 이동과 피격
 
@@ -83,8 +81,6 @@ setCooldown() {
 }
 ```
 
----
-
 ## Mob — AI와 드롭
 
 몬스터는 생성 시점에 HP, 속도 배율, 아이템 드롭률을 받는다.
@@ -154,8 +150,6 @@ die() {
   this.destroy();
 }
 ```
-
----
 
 플레이어와 몬스터 모두 Phaser 스프라이트를 상속해서 물리 엔진과 자연스럽게 연결된다.
 

@@ -1,4 +1,4 @@
----
+﻿---
 title: "씬 설계 — 게임 흐름을 어떻게 나눌까"
 date: "2026-05-20"
 project: "Lion Survival"
@@ -18,8 +18,6 @@ LoadingScene → MainScene → PlayingScene → GameClearScene
 
 각 씬이 맡을 역할도 명확했다.
 
----
-
 ## LoadingScene — 에셋 로딩 + 애니메이션 등록
 
 이전 포스트에서 다뤘다. 로딩 끝나면 바로 `mainScene`으로 전환.
@@ -36,8 +34,6 @@ create() {
 
 `anims`는 전역으로 등록되기 때문에 `LoadingScene`에서 한 번만 만들면 다른 씬에서도 그냥 쓸 수 있다.
 
----
-
 ## MainScene — 타이틀 화면
 
 엔터 누르면 게임 시작. 단순하다.
@@ -47,8 +43,6 @@ this.input.keyboard.on("keydown-ENTER", () => {
   this.scene.start("playGame");
 });
 ```
-
----
 
 ## PlayingScene — 게임의 전부
 
@@ -116,8 +110,6 @@ update() {
 
 `update()`는 최대한 가볍게 유지했다. 실제 로직은 매니저 함수들에 위임한다.
 
----
-
 ## 레벨업 시스템 — afterLevelUp()
 
 경험치가 꽉 차면 `pause(this, "levelup")`으로 일시정지 씬이 뜨고, 선택 후 `afterLevelUp()`이 호출된다.
@@ -145,8 +137,6 @@ afterLevelUp() {
 ```
 
 레벨이 올라갈수록 강한 몬스터로 교체되고 무기가 강화된다. 7레벨에서 보스인 라이온이 등장하면서 배경도 바뀐다.
-
----
 
 씬 설계가 제대로 잡혀있으면 이후 구현이 훨씬 수월하다.
 
