@@ -3,11 +3,15 @@ import PostCard from '@/components/PostCard'
 import ProjectCard from '@/components/ProjectCard'
 import Link from 'next/link'
 
+function padToFive<T>(arr: T[]): (T | null)[] {
+  return [...arr, ...Array(Math.max(0, 5 - arr.length)).fill(null)]
+}
+
 export default function Home() {
   const recent = getAllPosts().slice(0, 5)
-  const projects = getProjectMetas().slice(0, 3)
-  const posts = getPostsByType('posts').slice(0, 3)
-  const links = getPostsByType('links').slice(0, 3)
+  const projects = getProjectMetas().slice(0, 5)
+  const posts = getPostsByType('posts').slice(0, 5)
+  const links = getPostsByType('links').slice(0, 5)
 
   return (
     <>
@@ -16,9 +20,13 @@ export default function Home() {
           <h2>최근 글</h2>
         </div>
         <div className="post-list">
-          {recent.map((post) => (
-            <PostCard key={`${post.type}-${post.slug}`} post={post} />
-          ))}
+          {padToFive(recent).map((post, i) =>
+            post ? (
+              <PostCard key={`${post.type}-${post.slug}`} post={post} />
+            ) : (
+              <div key={`recent-empty-${i}`} className="post-card" />
+            )
+          )}
         </div>
       </section>
 
@@ -28,9 +36,13 @@ export default function Home() {
           <Link href="/projects">전체 보기 →</Link>
         </div>
         <div className="project-list">
-          {projects.map((p) => (
-            <ProjectCard key={p.slug} project={p} />
-          ))}
+          {padToFive(projects).map((p, i) =>
+            p ? (
+              <ProjectCard key={p.slug} project={p} />
+            ) : (
+              <div key={`project-empty-${i}`} className="project-card" />
+            )
+          )}
         </div>
       </section>
 
@@ -40,9 +52,13 @@ export default function Home() {
           <Link href="/posts">전체 보기 →</Link>
         </div>
         <div className="post-list">
-          {posts.map((post) => (
-            <PostCard key={post.slug} post={post} />
-          ))}
+          {padToFive(posts).map((post, i) =>
+            post ? (
+              <PostCard key={post.slug} post={post} />
+            ) : (
+              <div key={`post-empty-${i}`} className="post-card" />
+            )
+          )}
         </div>
       </section>
 
@@ -52,9 +68,13 @@ export default function Home() {
           <Link href="/links">전체 보기 →</Link>
         </div>
         <div className="post-list">
-          {links.map((post) => (
-            <PostCard key={post.slug} post={post} />
-          ))}
+          {padToFive(links).map((post, i) =>
+            post ? (
+              <PostCard key={post.slug} post={post} />
+            ) : (
+              <div key={`link-empty-${i}`} className="post-card" />
+            )
+          )}
         </div>
       </section>
     </>
