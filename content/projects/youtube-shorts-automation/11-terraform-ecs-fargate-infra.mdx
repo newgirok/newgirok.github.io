@@ -6,11 +6,11 @@ tags: ["Terraform", "ECS", "Fargate", "AWS"]
 excerpt: "ecs-cluster, IAM, S3 모듈을 신규 추가하고 SQS 기반 Auto Scaling까지 연결해 실제 배포 가능한 상태로 만들었습니다."
 ---
 
-Phase 3에서는 ECS/Fargate 인프라를 Terraform 모듈로 완성하는 작업을 진행했습니다.
+Phase 3에서는 ECS/Fargate 인프라를 Terraform 모듈로 완성하는 작업을 진행했다.
 
-이번 커밋에서 새로 추가된 모듈은 세 가지입니다. `ecs-cluster`는 Fargate 클러스터 자체를 관리하고, `iam` 모듈은 `FargateTaskExecutionRole`과 `FargateTaskRole`을 분리해서 정의합니다. `s3-bucket` 모듈은 영상 처리 결과물 저장용으로 추가했습니다.
+이번 커밋에서 새로 추가된 모듈은 세 가지다. `ecs-cluster`는 Fargate 클러스터 자체를 관리하고, `iam` 모듈은 `FargateTaskExecutionRole`과 `FargateTaskRole`을 분리해서 정의한다. `s3-bucket` 모듈은 영상 처리 결과물 저장용으로 추가했다.
 
-기존 `ecs-worker` 모듈에는 App Auto Scaling과 CloudWatch Alarm을 붙였습니다. SQS 큐에 쌓인 메시지 수를 기준으로 scale-up/down이 트리거되는 구조입니다. 초기 `desired_count`는 0으로 설정해서 큐가 비어 있을 때는 태스크가 아예 뜨지 않도록 했습니다.
+기존 `ecs-worker` 모듈에는 App Auto Scaling과 CloudWatch Alarm을 붙였다. SQS 큐에 쌓인 메시지 수를 기준으로 scale-up/down이 트리거되는 구조다. 초기 `desired_count`는 0으로 설정해서 큐가 비어 있을 때는 태스크가 아예 뜨지 않도록 했다.
 
 ```hcl
 resource "aws_appautoscaling_policy" "scale_up" {
@@ -30,6 +30,6 @@ resource "aws_appautoscaling_policy" "scale_up" {
 }
 ```
 
-`dev/prod` 양쪽 `main.tf`에서 VPC와 Subnet은 data source로 참조하고, S3, IAM, ECR, ECS Worker 모듈을 순서대로 연결했습니다. `outputs.tf`도 각 환경에 새로 추가해서 클러스터 ARN, 태스크 역할 ARN 등을 외부에서 참조할 수 있게 했습니다.
+`dev/prod` 양쪽 `main.tf`에서 VPC와 Subnet은 data source로 참조하고, S3, IAM, ECR, ECS Worker 모듈을 순서대로 연결했다. `outputs.tf`도 각 환경에 새로 추가해서 클러스터 ARN, 태스크 역할 ARN 등을 외부에서 참조할 수 있게 했다.
 
-이 시점부터는 `terraform apply` 한 번으로 워커 인프라 전체가 올라가는 상태가 됩니다.
+이 시점부터는 `terraform apply` 한 번으로 워커 인프라 전체가 올라간다.

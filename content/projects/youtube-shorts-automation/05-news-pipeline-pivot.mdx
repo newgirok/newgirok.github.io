@@ -6,7 +6,9 @@ tags: ["pipeline", "YouTube API", "NestJS", "Prisma"]
 excerpt: "어필리에이트 마케팅 기능을 전면 제거하고 뉴스·시사 전용 숏츠 파이프라인으로 방향을 바꿨다."
 ---
 
-처음 설계할 때는 어필리에이트 CTA를 영상 말미에 넣는 구조였는데, 실제로 돌려보니 뉴스 콘텐츠와 어울리지 않았다. 결국 이번 작업에서 `ScriptOutput` 타입에서 `affiliate` 필드를 통째로 들어내고, `comment_bait` 필드로 교체했다. 스크립트 생성 프롬프트도 25~35초 뉴스 포맷에 맞게 다시 썼다.
+처음 설계할 때는 어필리에이트 CTA를 영상 말미에 넣는 구조였는데, 실제로 돌려보니 뉴스 콘텐츠와 어울리지 않았다.
+
+방향을 바꿨다. `ScriptOutput` 타입에서 `affiliate` 필드를 통째로 들어내고 `comment_bait` 필드로 교체했다. 스크립트 생성 프롬프트도 25~35초 뉴스 포맷에 맞게 다시 썼다.
 
 자막 쪽도 손을 많이 봤다. `renderer.ts`에서 폰트 크기를 24에서 46으로 올리고, `subtitle/src/processor.ts`에서 구속·탄핵·파업 같은 시사 키워드에 빨간 하이라이트를 적용했다. 숏츠는 세로 화면이라 가독성이 중요한데, 기존 크기로는 너무 작았다.
 
@@ -24,6 +26,6 @@ containsSyntheticMedia: true,
 
 뉴스 자동 수집도 이번에 붙였다. `news-fetcher.ts`가 Google News RSS를 파싱하고, `POST /jobs/auto-news` 엔드포인트가 카테고리(top/politics/business/nation)별로 잡을 자동 생성한다. OAuth 스코프에 `yt-analytics.readonly`도 추가해서 Analytics 데이터 수집 경로도 열었다.
 
-DB 쪽에서는 Prisma 마이그레이션 두 개가 들어갔다. `Job` 모델에 `privacyStatus`(기본값 `'public'`), `ChannelAnalytics`에 `watchTimeMinutes`(BIGINT)를 추가했다. Analytics sync 로직은 채널 sync 시 30일치 일별 데이터를 YouTube Analytics API로 가져와 upsert하는 방식이다. 채널 응답에 최근 90일 업로드 수와 Shorts 조회수(YPP 통계용)도 함께 내려주도록 `channels.service.ts`를 수정했다.
+DB 쪽에서는 Prisma 마이그레이션 두 개가 들어갔다. `Job` 모델에 `privacyStatus`(기본값 `'public'`), `ChannelAnalytics`에 `watchTimeMinutes`(BIGINT)를 추가했다. Analytics sync 로직은 채널 sync 시 30일치 일별 데이터를 YouTube Analytics API로 가져와 upsert하는 방식이다.
 
-방향이 어필리에이트에서 뉴스 채널 운영으로 확실히 정리된 커밋들이었다.
+어필리에이트에서 뉴스 채널 운영으로, 방향이 확실히 정리된 커밋들이었다.
