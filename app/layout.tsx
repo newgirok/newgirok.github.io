@@ -3,10 +3,23 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
+const BASE_URL = 'https://newgirok.github.io'
+
 export const metadata: Metadata = {
   title: { default: '개인의 기록', template: '%s | 개인의 기록' },
-  description: '개인의 기록',
+  description: '개발, 투자, 비즈니스에 대한 개인의 기록',
   themeColor: '#f5f5f5',
+  openGraph: {
+    siteName: '개인의 기록',
+    locale: 'ko_KR',
+    type: 'website',
+    url: BASE_URL,
+    images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: [`${BASE_URL}/og-image.png`],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

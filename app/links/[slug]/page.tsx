@@ -16,10 +16,26 @@ export async function generateStaticParams() {
   return posts.length > 0 ? posts.map((post) => ({ slug: post.slug })) : [{ slug: '_empty' }]
 }
 
+const BASE_URL = 'https://newgirok.github.io'
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const post = getPostBySlug('links', slug)
-  return { title: post?.title ?? 'Links' }
+  if (!post) return { title: 'Links' }
+  return {
+    title: post.title,
+    openGraph: {
+      title: post.title,
+      url: `${BASE_URL}/links/${slug}`,
+      type: 'article',
+      images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      images: [`${BASE_URL}/og-image.png`],
+    },
+  }
 }
 
 export default async function LinkPost({ params }: Props) {
