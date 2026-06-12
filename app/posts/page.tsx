@@ -4,6 +4,8 @@ import PostCard from '@/components/PostCard'
 
 export const metadata: Metadata = { title: '글' }
 
+const ROW_COUNT = 10
+
 export default function PostList() {
   const posts = getPostsByType('posts')
 
@@ -11,7 +13,7 @@ export default function PostList() {
     slug,
     label: POST_CATEGORIES[slug],
     posts: posts.filter((p) => p.category === slug),
-  })).filter((g) => g.posts.length > 0)
+  }))
 
   const uncategorized = posts.filter((p) => !p.category)
 
@@ -21,18 +23,24 @@ export default function PostList() {
         <h1>글</h1>
       </div>
 
-      {grouped.map(({ slug, label, posts: catPosts }) => (
-        <div key={slug} className="home-section">
-          <div className="home-section-header">
-            <h2>{label}</h2>
+      {grouped.map(({ slug, label, posts: catPosts }) => {
+        const emptyCount = Math.max(0, ROW_COUNT - catPosts.length)
+        return (
+          <div key={slug} className="home-section">
+            <div className="home-section-header">
+              <h2>{label}</h2>
+            </div>
+            <div className="post-list">
+              {catPosts.map((post) => (
+                <PostCard key={post.slug} post={post} />
+              ))}
+              {Array.from({ length: emptyCount }).map((_, i) => (
+                <div key={`empty-${i}`} className="post-card post-card--empty" />
+              ))}
+            </div>
           </div>
-          <div className="post-list">
-            {catPosts.map((post) => (
-              <PostCard key={post.slug} post={post} />
-            ))}
-          </div>
-        </div>
-      ))}
+        )
+      })}
 
       {uncategorized.length > 0 && (
         <div className="home-section">
