@@ -12,6 +12,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
+      <head>
+        <link rel="preload" href="/fonts/SBAggro-Light.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/SBAggro-Medium.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/SBAggro-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+      </head>
       <body>
         <div className="page">
           <div className="container">
