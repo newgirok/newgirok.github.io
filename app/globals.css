@@ -360,17 +360,33 @@ a {
 .prose table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1rem 0;
-  font-size: 0.9rem;
+  margin: 1.5rem 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  border: 1px solid #d4d4d4;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-.prose th, .prose td {
-  padding: 0.4rem 0.65rem;
-  border: 1px solid var(--border);
+.prose th {
+  padding: 0.65rem 1rem;
+  background: #1a1a1a;
+  color: #fff;
+  font-weight: 600;
   text-align: left;
+  letter-spacing: 0.01em;
+  border-bottom: 2px solid #1a1a1a;
 }
 
-.prose th { background: #f9f9f9; font-weight: 600; }
+.prose td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #e8e8e8;
+  vertical-align: top;
+}
+
+.prose tr:last-child td { border-bottom: none; }
+
+.prose tr:nth-child(even) td { background: #f9f9f9; }
 
 .prose a {
   color: var(--text);
