@@ -160,7 +160,7 @@ a {
 }
 
 .post-card-title a {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 500;
   color: var(--text);
   white-space: nowrap;
@@ -201,7 +201,7 @@ a {
 .project-card:hover .project-card-title { text-decoration: underline; text-underline-offset: 3px; }
 
 .project-card-title {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 500;
   color: var(--text);
 }
@@ -214,7 +214,7 @@ a {
 }
 
 .post-card-title-text {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 500;
   color: var(--text);
   overflow: hidden;
@@ -237,7 +237,7 @@ a {
 }
 
 .home-section-header h2 {
-  font-size: 0.75rem;
+  font-size: 1.1rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
