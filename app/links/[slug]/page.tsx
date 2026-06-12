@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import rehypeHighlight from 'rehype-highlight'
+import remarkGfm from 'remark-gfm'
 import { getPostsByType, getPostBySlug } from '@/lib/posts'
 
 export const dynamicParams = false
@@ -63,7 +64,7 @@ export default async function LinkPost({ params }: Props) {
         <div className="prose">
           <MDXRemote
             source={post.content}
-            options={{ mdxOptions: { rehypePlugins: [rehypeHighlight] } }}
+            options={{ mdxOptions: { remarkPlugins: [remarkGfm], rehypePlugins: [rehypeHighlight] } }}
           />
         </div>
       </article>
