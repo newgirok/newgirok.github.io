@@ -26,11 +26,14 @@ function formatDate(dateStr: string) {
   return d.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })
 }
 
+const ROW_COUNT = 10
+
 export default async function ProjectDetailPage({ params }: Props) {
   const { project } = await params
   const metas = getProjectMetas()
   const meta = metas.find((m) => m.slug === project)
   const posts = getProjectPosts(project)
+  const emptyCount = Math.max(0, ROW_COUNT - posts.length)
 
   return (
     <>
@@ -44,6 +47,9 @@ export default async function ProjectDetailPage({ params }: Props) {
             <span className="post-card-title-text">{post.title}</span>
             <span className="post-card-date">{formatDate(post.date)}</span>
           </Link>
+        ))}
+        {Array.from({ length: emptyCount }).map((_, i) => (
+          <div key={`empty-${i}`} className="post-card post-card--empty" />
         ))}
       </div>
     </>

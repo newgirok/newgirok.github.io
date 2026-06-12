@@ -10,8 +10,11 @@ function formatDate(dateStr: string) {
   return d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
+const ROW_COUNT = 10
+
 export default function ProjectsPage() {
   const projects = getProjectMetas()
+  const emptyCount = Math.max(0, ROW_COUNT - projects.length)
   return (
     <>
       <div className="page-header">
@@ -25,6 +28,9 @@ export default function ProjectsPage() {
               {p.postCount}개의 기록 · {formatDate(p.latestDate)}
             </span>
           </Link>
+        ))}
+        {Array.from({ length: emptyCount }).map((_, i) => (
+          <div key={`empty-${i}`} className="project-card project-card--empty" />
         ))}
       </div>
     </>

@@ -151,6 +151,8 @@ a {
 
 .post-card--empty { pointer-events: none; }
 
+.project-card--empty { pointer-events: none; }
+
 .post-type {
   font-size: 0.7rem;
   font-weight: 300;

@@ -4,8 +4,11 @@ import PostCard from '@/components/PostCard'
 
 export const metadata: Metadata = { title: '링크' }
 
+const ROW_COUNT = 10
+
 export default function LinkList() {
   const posts = getPostsByType('links')
+  const emptyCount = Math.max(0, ROW_COUNT - posts.length)
   return (
     <>
       <div className="page-header">
@@ -14,6 +17,9 @@ export default function LinkList() {
       <div className="post-list">
         {posts.map((post) => (
           <PostCard key={post.slug} post={post} />
+        ))}
+        {Array.from({ length: emptyCount }).map((_, i) => (
+          <div key={`empty-${i}`} className="post-card post-card--empty" />
         ))}
       </div>
     </>
