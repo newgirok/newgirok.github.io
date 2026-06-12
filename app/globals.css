@@ -202,17 +202,20 @@ a {
 
 .project-card-title {
   font-size: 0.95rem;
+  font-weight: 500;
   color: var(--text);
 }
 
 .project-card-meta {
   font-size: 0.78rem;
+  font-weight: 300;
   color: var(--faint);
   margin-top: 0.2rem;
 }
 
 .post-card-title-text {
   font-size: 0.95rem;
+  font-weight: 500;
   color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
