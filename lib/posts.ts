@@ -4,6 +4,19 @@ import matter from 'gray-matter'
 
 export type PostType = 'posts' | 'links'
 
+export const POST_CATEGORIES: Record<string, string> = {
+  dev: '개발',
+  architecture: '아키텍처',
+  infra: '인프라',
+  network: '네트워크',
+  ai: 'AI',
+  business: '비즈니스',
+  invest: '투자',
+  career: '커리어',
+}
+
+export const CATEGORY_ORDER = ['dev', 'architecture', 'infra', 'network', 'ai', 'business', 'invest', 'career']
+
 export interface Post {
   slug: string
   type: PostType
@@ -13,6 +26,7 @@ export interface Post {
   excerpt: string
   content: string
   url?: string
+  category?: string
 }
 
 export interface ProjectPost {
@@ -64,6 +78,7 @@ export function getPostsByType(type: PostType): Post[] {
         excerpt: data.excerpt ?? '',
         content,
         url: data.url,
+        category: data.category,
       }
     })
     .sort(sortByDateDesc)
@@ -85,6 +100,7 @@ export function getPostBySlug(type: PostType, slug: string): Post | null {
     excerpt: data.excerpt ?? '',
     content,
     url: data.url,
+    category: data.category,
   }
 }
 
