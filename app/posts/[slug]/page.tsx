@@ -43,6 +43,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
+function formatDate(dateStr: string) {
+  if (!dateStr) return ''
+  return new Date(dateStr).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+}
+
 export default async function PostDetail({ params }: Props) {
   const { slug } = await params
   const post = getPostBySlug('posts', slug)
@@ -55,7 +60,7 @@ export default async function PostDetail({ params }: Props) {
         <header className="article-header">
           <h1>{post.title}</h1>
           <div className="article-meta">
-            <span>{post.date}</span>
+            <span>{formatDate(post.date)}</span>
             {post.tags.length > 0 && (
               <div className="article-meta-tags">
                 {post.tags.map((tag) => (
