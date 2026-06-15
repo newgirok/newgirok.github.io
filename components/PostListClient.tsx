@@ -52,7 +52,7 @@ export default function PostListClient({ groups, uncategorized, rowCount }: Prop
       </div>
 
       {visibleGroups.map(({ slug, label, posts }) => {
-        const emptyCount = active === 'all' ? Math.max(0, rowCount - posts.length) : 0
+        const emptyCount = active !== 'all' ? 0 : Math.max(0, rowCount - posts.length)
         return (
           <div key={slug} className="home-section">
             <div className="home-section-header">
