@@ -57,6 +57,7 @@ export default async function ProjectPostPage({ params }: Props) {
           <MDXRemote
             source={post.content}
             options={{ mdxOptions: { rehypePlugins: [rehypeHighlight] } }}
+            components={{ table: (props) => <div className="prose-table-wrapper"><table {...props} /></div> }}
           />
         </div>
       </article>

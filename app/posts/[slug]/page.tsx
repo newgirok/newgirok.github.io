@@ -74,6 +74,7 @@ export default async function PostDetail({ params }: Props) {
           <MDXRemote
             source={post.content}
             options={{ mdxOptions: { remarkPlugins: [[remarkGfm, { singleTilde: false }]], rehypePlugins: [rehypeHighlight] } }}
+            components={{ table: (props) => <div className="prose-table-wrapper"><table {...props} /></div> }}
           />
         </div>
       </article>

@@ -74,6 +74,8 @@ a {
   padding: 0 2.5rem;
 }
 
+article { min-width: 0; }
+
 /* ── Header ── */
 .header {
   padding: 2rem 0 1.5rem;
@@ -393,15 +395,18 @@ a {
   margin: 1.5rem 0;
 }
 
+.prose-table-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
 .prose table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1.5rem 0;
   font-size: 0.85rem;
   line-height: 1.6;
   border: 1px solid #d4d4d4;
   border-radius: 6px;
-  overflow: hidden;
 }
 
 .prose th {
@@ -454,12 +459,20 @@ a {
 @media (max-width: 480px) {
   body { font-size: 15px; }
 
-  .header-nav { gap: 1rem; }
+  .page { padding: 0 0.75rem; }
+  .container { padding: 0 1rem; }
+
+  .header-logo { font-size: 1.5rem; }
+  .header-nav { gap: 0.75rem; }
 
   .post-card {
     grid-template-columns: 2.5rem 1fr auto;
     gap: 0 0.5rem;
   }
 
-  .article-header h1 { font-size: 1.3rem; }
+  .project-card { padding-left: 1.5rem; }
+
+  .article-header h1 { font-size: 1.15rem; }
+
+  .category-filter { gap: 0.75rem; margin-bottom: 1.25rem; }
 }
