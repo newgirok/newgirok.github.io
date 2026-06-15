@@ -145,7 +145,7 @@ article { min-width: 0; }
 }
 
 .post-card--labeled {
-  grid-template-columns: 3rem 1fr auto;
+  grid-template-columns: 5rem 1fr auto;
   padding-left: 0;
 }
 
@@ -159,6 +159,7 @@ article { min-width: 0; }
   font-size: 0.7rem;
   font-weight: 300;
   text-align: right;
+  white-space: nowrap;
 }
 
 .post-type-posts,
@@ -266,8 +267,12 @@ article { min-width: 0; }
   display: flex;
   gap: 1.25rem;
   margin-bottom: 1.75rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+
+.category-filter::-webkit-scrollbar { display: none; }
 
 .category-filter-btn {
   font-size: 0.78rem;
@@ -469,6 +474,8 @@ article { min-width: 0; }
     grid-template-columns: 2.5rem 1fr auto;
     gap: 0 0.5rem;
   }
+
+  .post-card--labeled { grid-template-columns: 4rem 1fr auto; }
 
   .project-card { padding-left: 1.5rem; }
 
