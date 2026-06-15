@@ -20,7 +20,7 @@ export default function PostListClient({ groups, uncategorized, rowCount }: Prop
   const [active, setActive] = useState('all')
 
   const filledGroups = groups.filter((g) => g.posts.length > 0)
-  const visibleGroups = active === 'all' ? filledGroups : groups.filter((g) => g.slug === active)
+  const visibleGroups = active === 'all' ? groups : groups.filter((g) => g.slug === active)
   const showUncategorized = active === 'all' && uncategorized.length > 0
 
   return (
