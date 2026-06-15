@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { Post } from '@/lib/posts'
-import { POST_CATEGORIES } from '@/lib/posts'
+import { POST_CATEGORIES } from '@/lib/categories'
 
 function formatDate(dateStr: string) {
   if (!dateStr) return ''

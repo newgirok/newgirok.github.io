@@ -259,6 +259,35 @@ a {
 
 .home-section-header a:hover { color: var(--text); }
 
+/* ── Category Filter ── */
+.category-filter {
+  display: flex;
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.category-filter-btn {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  padding: 0.15rem 0;
+  font-family: inherit;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.category-filter-btn:hover { color: var(--text); }
+
+.category-filter-btn--active {
+  color: var(--text);
+  border-bottom-color: var(--text);
+}
+
 /* ── Page Header ── */
 .page-header { margin-bottom: 2rem; }
 

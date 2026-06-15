@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getPostsByType, POST_CATEGORIES, CATEGORY_ORDER } from '@/lib/posts'
-import PostCard from '@/components/PostCard'
+import PostListClient from '@/components/PostListClient'
 
 export const metadata: Metadata = { title: '글' }
 
@@ -9,7 +9,7 @@ const ROW_COUNT = 10
 export default function PostList() {
   const posts = getPostsByType('posts')
 
-  const grouped = CATEGORY_ORDER.map((slug) => ({
+  const groups = CATEGORY_ORDER.map((slug) => ({
     slug,
     label: POST_CATEGORIES[slug],
     posts: posts.filter((p) => p.category === slug),
@@ -22,38 +22,7 @@ export default function PostList() {
       <div className="page-header">
         <h1>글</h1>
       </div>
-
-      {grouped.map(({ slug, label, posts: catPosts }) => {
-        const emptyCount = Math.max(0, ROW_COUNT - catPosts.length)
-        return (
-          <div key={slug} className="home-section">
-            <div className="home-section-header">
-              <h2>{label}</h2>
-            </div>
-            <div className="post-list">
-              {catPosts.map((post) => (
-                <PostCard key={post.slug} post={post} />
-              ))}
-              {Array.from({ length: emptyCount }).map((_, i) => (
-                <div key={`empty-${i}`} className="post-card post-card--empty" />
-              ))}
-            </div>
-          </div>
-        )
-      })}
-
-      {uncategorized.length > 0 && (
-        <div className="home-section">
-          <div className="home-section-header">
-            <h2>기타</h2>
-          </div>
-          <div className="post-list">
-            {uncategorized.map((post) => (
-              <PostCard key={post.slug} post={post} />
-            ))}
-          </div>
-        </div>
-      )}
+      <PostListClient groups={groups} uncategorized={uncategorized} rowCount={ROW_COUNT} />
     </>
   )
 }
