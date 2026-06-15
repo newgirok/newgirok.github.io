@@ -73,7 +73,7 @@ export default async function PostDetail({ params }: Props) {
         <div className="prose">
           <MDXRemote
             source={post.content}
-            options={{ mdxOptions: { remarkPlugins: [remarkGfm], rehypePlugins: [rehypeHighlight] } }}
+            options={{ mdxOptions: { remarkPlugins: [[remarkGfm, { singleTilde: false }]], rehypePlugins: [rehypeHighlight] } }}
           />
         </div>
       </article>
