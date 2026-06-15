@@ -20,7 +20,7 @@ export default function PostListClient({ groups, uncategorized, rowCount }: Prop
   const [active, setActive] = useState('all')
 
   const filledGroups = groups.filter((g) => g.posts.length > 0)
-  const visibleGroups = active === 'all' ? filledGroups : filledGroups.filter((g) => g.slug === active)
+  const visibleGroups = active === 'all' ? filledGroups : groups.filter((g) => g.slug === active)
   const showUncategorized = active === 'all' && uncategorized.length > 0
 
   return (
@@ -32,15 +32,23 @@ export default function PostListClient({ groups, uncategorized, rowCount }: Prop
         >
           전체
         </button>
-        {filledGroups.map((g) => (
-          <button
-            key={g.slug}
-            className={`category-filter-btn${active === g.slug ? ' category-filter-btn--active' : ''}`}
-            onClick={() => setActive(g.slug)}
-          >
-            {g.label}
-          </button>
-        ))}
+        {groups.map((g) => {
+          const empty = g.posts.length === 0
+          return (
+            <button
+              key={g.slug}
+              className={[
+                'category-filter-btn',
+                active === g.slug ? 'category-filter-btn--active' : '',
+                empty ? 'category-filter-btn--disabled' : '',
+              ].join(' ').trim()}
+              onClick={() => !empty && setActive(g.slug)}
+              disabled={empty}
+            >
+              {g.label}
+            </button>
+          )
+        })}
       </div>
 
       {visibleGroups.map(({ slug, label, posts }) => {

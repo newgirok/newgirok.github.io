@@ -288,6 +288,11 @@ a {
   border-bottom-color: var(--text);
 }
 
+.category-filter-btn--disabled {
+  color: var(--border);
+  cursor: default;
+}
+
 /* ── Page Header ── */
 .page-header { margin-bottom: 2rem; }
 
